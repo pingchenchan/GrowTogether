@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
 import { Card, Text, FAB } from 'react-native-paper';
 import { useRoute, useNavigation } from '@react-navigation/native';
@@ -15,7 +15,7 @@ export default function ChallengeDetail() {
   const route = useRoute<ChallengeDetailScreenRouteProp>();
   const navigation = useNavigation<ChallengeDetailScreenNavigationProp>();
 
-  const fetchChallengeDetails = async () => {
+  const fetchChallengeDetails = useCallback(async () => {
     try {
       const [challengeResponse, checkinsResponse] = await Promise.all([
         fetch(`/api/challenges/${route.params.challengeId}`),
@@ -30,11 +30,11 @@ export default function ChallengeDetail() {
     } catch (error) {
       console.error('Error fetching challenge details:', error);
     }
-  };
+  }, [route.params.challengeId]);
 
   useEffect(() => {
     fetchChallengeDetails();
-  }, [route.params.challengeId]);
+  }, [fetchChallengeDetails]);
 
   const renderCheckinCard = ({ item }: { item: Checkin }) => (
     <Card style={styles.checkinCard}>

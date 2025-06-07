@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider as PaperProvider } from 'react-native-paper';
@@ -10,14 +10,17 @@ import CreateChallenge from './src/screens/CreateChallenge';
 import ChallengeDetail from './src/screens/ChallengeDetail';
 import Checkin from './src/screens/Checkin';
 
-// 初始化 MirageJS
-if (process.env.NODE_ENV === 'development') {
-  makeServer();
-}
-
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
+  useEffect(() => {
+    // 初始化 MirageJS
+    const server = makeServer();
+    return () => {
+      server.shutdown();
+    };
+  }, []);
+
   return (
     <PaperProvider>
       <NavigationContainer>

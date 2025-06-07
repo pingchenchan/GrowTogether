@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, FlatList, RefreshControl, StyleSheet } from 'react-native';
 import { Card, FAB, Text } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
@@ -12,7 +12,7 @@ export default function Dashboard() {
   const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation<DashboardScreenNavigationProp>();
 
-  const fetchChallenges = async () => {
+  const fetchChallenges = useCallback(async () => {
     try {
       const response = await fetch('/api/challenges');
       const data = await response.json();
@@ -20,17 +20,17 @@ export default function Dashboard() {
     } catch (error) {
       console.error('Error fetching challenges:', error);
     }
-  };
+  }, []);
 
-  const onRefresh = async () => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await fetchChallenges();
     setRefreshing(false);
-  };
+  }, [fetchChallenges]);
 
   useEffect(() => {
     fetchChallenges();
-  }, []);
+  }, [fetchChallenges]);
 
   const renderChallengeCard = ({ item }: { item: Challenge }) => (
     <Card
