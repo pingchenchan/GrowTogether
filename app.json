@@ -33,7 +33,6 @@
           "photosPermission": "應用程式需要存取您的相簿以選擇照片。"
         }
       ]
-    ],
-    "entryPoint": "./index.js"
+    ]
   }
 }
